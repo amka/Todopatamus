@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=todopatamus
+Exec=todopatamus
+Icon=com.tenderowl.todopatamus
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true
