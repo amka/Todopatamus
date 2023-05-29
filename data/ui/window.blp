@@ -16,5 +16,11 @@ template $TodopatamusWindow : Adw.ApplicationWindow {
 
       child: $ProjectsPage projects_page {};
     }
+
+    Adw.LeafletPage tasks_leaflet {
+      name: "tasks_page";
+
+      child: $TasksPage tasks_page {};
+    }
   }
 }

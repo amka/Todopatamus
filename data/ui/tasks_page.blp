@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $ProjectsPage : Box {
+template $TasksPage : Box {
   orientation: vertical;
 
   HeaderBar header_bar {
@@ -15,10 +15,8 @@ template $ProjectsPage : Box {
   ScrolledWindow {
     vexpand: true;
     child: Adw.StatusPage {
-      title: _("Where Are Your Feeds?");
-      description: _("Please select the RSS service you are using and log in to get going.");
-      icon-name: "todopatamus";
-
+      title: _("Where Are Your Tasks?");
+      description: _("Press Ctrl+N to add a Task.");
       child: Adw.Clamp {
         visible: true;
         maximum-size: 360;
