@@ -3,5 +3,6 @@
   <gresource prefix="/com/tenderowl/todopatamus">
     <file preprocess="xml-stripblanks">ui/window.ui</file>
     <file preprocess="xml-stripblanks">ui/help-overlay.ui</file>
+    <file preprocess="xml-stripblanks">ui/projects_page.ui</file>
   </gresource>
 </gresources>

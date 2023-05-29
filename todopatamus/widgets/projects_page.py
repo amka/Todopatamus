@@ -25,15 +25,10 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
-from todopatamus.widgets.projects_page import ProjectsPage
 
-
-@Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/window.ui')
-class TodopatamusWindow(Adw.ApplicationWindow):
-    __gtype_name__ = 'TodopatamusWindow'
-
-    label = Gtk.Template.Child()
-    projects_page: ProjectsPage = Gtk.Template.Child()
+@Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/projects_page.ui')
+class ProjectsPage(Gtk.Box):
+    __gtype_name__ = 'ProjectsPage'
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
