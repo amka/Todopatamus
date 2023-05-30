@@ -1,4 +1,5 @@
 using Gtk 4.0;
+using Gio 2.0;
 using Adw 1;
 
 template $TodopatamusWindow : Adw.ApplicationWindow {
@@ -23,4 +24,12 @@ template $TodopatamusWindow : Adw.ApplicationWindow {
       child: $TasksPage tasks_page {};
     }
   }
+
+  ShortcutController {
+    scope: global;
+    model: Gio.ListStore shortcut_list {
+      item-type: typeof<Gtk.Shortcut>;
+    };
+  }
+
 }
