@@ -25,10 +25,21 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
+from todopatamus.services.todo import todo_service
+from todopatamus.models.todo import Todo
+
 
 @Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/tasks_page.ui')
 class TasksPage(Gtk.Box):
     __gtype_name__ = 'TasksPage'
 
+    add_todo_btn: Gtk.Button = Gtk.Template.Child()
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    @Gtk.Template.Callback()
+    def on_add_todo_activate(self, sender: Gtk.Widget, *_):
+        print('on_add_todo_activate')
+        todo = Todo(summary='Todopatamus should be alive')
+        print(todo_service.put_item(todo))

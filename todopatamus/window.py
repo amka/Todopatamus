@@ -25,16 +25,18 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
-from todopatamus.widgets.projects_page import ProjectsPage
-from todopatamus.widgets.tasks_page import TasksPage
+from .models.todo import Todo
+from .services.todo import TodoService
+from .widgets.projects_page import ProjectsPage
+from .widgets.tasks_page import TasksPage
 
 
 @Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/window.ui')
 class TodopatamusWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'TodopatamusWindow'
 
-    label = Gtk.Template.Child()
-    projects_page: ProjectsPage = Gtk.Template.Child()
+    # projects_page: ProjectsPage = Gtk.Template.Child()
+    tasks_page: TasksPage = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

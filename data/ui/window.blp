@@ -3,8 +3,8 @@ using Gio 2.0;
 using Adw 1;
 
 template $TodopatamusWindow : Adw.ApplicationWindow {
-  default-width: 1000;
-  default-height: 800;
+  default-width: 800;
+  default-height: 600;
   title: _("Todopatamus");
 
   Adw.Leaflet main_leaflet {
@@ -12,11 +12,11 @@ template $TodopatamusWindow : Adw.ApplicationWindow {
     can-navigate-back: true;
     can-unfold: false;
 
-    Adw.LeafletPage projects_leaflet {
-      name: "projects_page";
+    // Adw.LeafletPage projects_leaflet {
+    //   name: "projects_page";
 
-      child: $ProjectsPage projects_page {};
-    }
+    //   child: $ProjectsPage projects_page {};
+    // }
 
     Adw.LeafletPage tasks_leaflet {
       name: "tasks_page";

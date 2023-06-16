@@ -23,6 +23,8 @@
         "*.a"
     ],
     "modules" : [
+        "python3-peewee.json",
+        "python3-nanoid.json",
         {
             "name" : "todopatamus",
             "builddir" : true,

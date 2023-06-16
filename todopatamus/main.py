@@ -29,6 +29,8 @@ gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw
+from .models.todo import Todo
+from .services.db import db_service
 from .window import TodopatamusWindow
 
 
@@ -41,6 +43,12 @@ class TodopatamusApplication(Adw.Application):
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
+
+        self.init_db()
+
+    def init_db(self):
+        db_service.initialize()
+        db_service.db.create_tables([Todo])
 
     def do_activate(self):
         """Called when the application is activated.
