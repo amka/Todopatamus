@@ -15,9 +15,11 @@ template $TodosColumn : Adw.Bin {
           setup => $on_item_setup();
         };
 
-        model: SingleSelection {
+        model: NoSelection {
           model: Gio.ListStore todos {};
         };
+
+        styles ["background", 'navigation-sidebar']
       }
     }
   }

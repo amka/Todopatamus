@@ -1,14 +1,24 @@
+import datetime
 from typing import List
 
-from gi.repository import Gom
+from gi.repository import Gom, GObject
 from loguru import logger
 
 from todopatamus.models.todoitem import TodoItem
 from todopatamus.services.db import DbService
 
 
-class TodoService:
+class TodoService(GObject.GObject):
+    __gtype_name__ = "TodoService"
+
+    __gsignals__ = {
+        "todos-changed": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+    }
+
     def __init__(self, db_service: DbService):
+        super().__init__()
+
+        self._db_service = db_service
         logger.debug("TodoService init")
         self.db_service = db_service
         self.repository = self.db_service.repository
@@ -37,6 +47,12 @@ class TodoService:
         _filter = Gom.Filter.new_eq(TodoItem, "id", todo_id)
         return self.repository.find_one_sync(TodoItem, filter=_filter)
 
-    def put_todo(self, summary: str):
-        item: TodoItem = TodoItem(repository=self.repository, summary=str)
+    def put_todo(self, todo: TodoItem):
+        item: TodoItem = TodoItem(repository=self.repository, summary=todo.summary)
+        item.todoId = todo.todoId
+        item.completed = todo.completed
+        item.createdAt = datetime.datetime.now(datetime.UTC).timestamp()
+        item.updatedAt = datetime.datetime.now(datetime.UTC).timestamp()
         item.save_sync()
+
+        self.emit("todos-changed", item.todoId)

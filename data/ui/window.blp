@@ -6,7 +6,7 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
   default-height: 640;
   width-request: 360;
   height-request: 360;
-  title: "Todopatamus";
+  title: "🦛 Todopatamus";
 
   content: Adw.ToolbarView {
     [top]
@@ -20,7 +20,20 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
       }
     }
 
-    content: $TodosColumn todos_column {};
+    content: Adw.ToolbarView {
+
+      content: $TodosColumn todos_column {
+        vexpand: true;
+      };
+
+      [bottom]
+      Adw.Clamp {
+        maximum-size: 640;
+
+        $TodoEntry todo_entry {}
+      }
+
+    };
   };
 }
 

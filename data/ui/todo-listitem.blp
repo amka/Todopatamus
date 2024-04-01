@@ -3,13 +3,12 @@ using Gtk 4.0;
 template $TodoListItem : Gtk.Box {
 
   spacing: 8;
-  margin-start: 12;
-  margin-top: 12;
-  margin-end: 12;
-  margin-bottom: 12;
+  margin-top: 8;
+  margin-bottom: 8;
 
   Button completed_btn {
     icon-name: 'checkbox-symbolic';
+    styles ["flat"]
   }
 
   Label summary_label {
@@ -20,9 +19,11 @@ template $TodoListItem : Gtk.Box {
 
   Button favorite_btn {
     icon-name: 'non-starred-symbolic';
+    styles ["flat"]
   }
 
   Button view_more_btn {
     icon-name: 'view-more-horizontal-symbolic';
+    styles ["flat"]
   }
 }

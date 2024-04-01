@@ -25,6 +25,9 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
+from todopatamus.models.todoitem import TodoItem
+from todopatamus.services.todo_service import TodoService
+from todopatamus.widgets.todo_entry import TodoEntry
 from todopatamus.widgets.todos_column import TodosColumn
 
 
@@ -33,9 +36,19 @@ class TodopatamusWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'TodopatamusWindow'
 
     todos_column: TodosColumn = Gtk.Template.Child()
+    todo_entry: TodoEntry = Gtk.Template.Child()
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, application: Adw.Application, **kwargs):
+        super().__init__(application=application, **kwargs)
+
+        self.todo_service: TodoService = application.props.todo_service
 
         if Gtk.Application.get_default().props.profile == 'dev':
             self.add_css_class('devel')
+
+        self.todo_entry.grab_focus()
+        self.todo_entry.connect('create', self.on_todo_create)
+
+    def on_todo_create(self, _entry: TodoEntry, todo: TodoItem):
+        self.todo_service.put_todo(todo)
+        self.todo_entry.grab_focus()

@@ -21,10 +21,10 @@
 # SOFTWARE.
 #
 # SPDX-License-Identifier: MIT
-from loguru import logger
 from typing import List
 
 from gi.repository import Adw, Gtk, Gio
+from loguru import logger
 
 from todopatamus.models.todoitem import TodoItem
 from todopatamus.services.todo_service import TodoService
@@ -35,12 +35,16 @@ from todopatamus.widgets.todo_listitem import TodoListItem
 class TodosColumn(Adw.Bin):
     __gtype_name__ = "TodosColumn"
 
+    todos_listview: Gtk.ListView = Gtk.Template.Child()
     todos: Gio.ListStore = Gtk.Template.Child()
 
     def __init__(self):
         super().__init__()
 
-        self.todo_service: TodoService = Gtk.Application.get_default().props.todo_service
+        self.todo_service: TodoService = Adw.Application.get_default().props.todo_service
+        self.todo_service.connect('todos-changed', self._on_todos_changed)
+
+        self.todos_listview.remove_css_class('view')
 
         self.load_todos()
 
@@ -61,3 +65,6 @@ class TodosColumn(Adw.Bin):
         self.todos.remove_all()
         for todo in todos:
             self.todos.append(todo)
+
+    def _on_todos_changed(self, serivce: TodoService, todo_id: str):
+        self.load_todos()

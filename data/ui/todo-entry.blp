@@ -1,0 +1,23 @@
+using Gtk 4.0;
+
+template $TodoEntry: Box {
+  margin-start: 10;
+  margin-end: 10;
+  styles ["linked"]
+
+  Entry entry {
+    placeholder-text: _('Make a ...');
+    show-emoji-icon: true;
+    margin-top: 12;
+    margin-bottom: 12;
+    hexpand: true;
+    activate => $on_entry_activate();
+    focusable: true;
+  }
+
+  Button add_btn {
+    icon-name: 'document-send-symbolic';
+    valign: center;
+    clicked => $on_add_btn_clicked();
+  }
+}

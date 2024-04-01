@@ -50,6 +50,7 @@ class TodopatamusApplication(Adw.Application):
 
         self.db_service = DbService('./todopatamus.db')
         self.todo_service = TodoService(self.db_service)
+        self.set_property('todo_service', self.todo_service)
 
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
