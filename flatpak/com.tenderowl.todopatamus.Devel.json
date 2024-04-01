@@ -37,6 +37,8 @@
         }
       ]
     },
+    "gom.json",
+    "python3-nanoid.json",
     {
       "name": "todopatamus",
       "builddir": true,
