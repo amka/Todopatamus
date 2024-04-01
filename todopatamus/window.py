@@ -33,3 +33,6 @@ class TodopatamusWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        if Gtk.Application.get_default().props.profile == 'dev':
+            self.add_css_class('devel')

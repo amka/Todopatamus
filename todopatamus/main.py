@@ -23,19 +23,27 @@
 # SPDX-License-Identifier: MIT
 
 import sys
-import gi
 
+from gi.overrides import GObject
+from gi.repository import Gio, Adw
 
-from gi.repository import Gtk, Gio, Adw
 from .window import TodopatamusWindow
 
 
 class TodopatamusApplication(Adw.Application):
     """The main application singleton class."""
 
-    def __init__(self):
+    version: str = GObject.property(type=str, default='0.1.0')
+    profile: str = GObject.property(type=str, default='dev')
+
+    def __init__(self, version: str, profile: str):
         super().__init__(application_id='com.tenderowl.todopatamus',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
+
+        # Set application-wide properties
+        self.version = version
+        self.profile = profile
+
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
@@ -82,7 +90,7 @@ class TodopatamusApplication(Adw.Application):
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
 
-def main(version):
+def main(version: str, profile: str):
     """The application's entry point."""
-    app = TodopatamusApplication()
+    app = TodopatamusApplication(version=version, profile=profile)
     return app.run(sys.argv)

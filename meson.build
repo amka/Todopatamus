@@ -4,6 +4,12 @@ project('todopatamus',
   default_options: [ 'warning_level=2', 'werror=false', ],
 )
 
+if get_option('profile') == 'release'
+  profile = 'release'
+else
+  profile = 'dev'
+endif
+
 
 i18n = import('i18n')
 pymod = import('python')
