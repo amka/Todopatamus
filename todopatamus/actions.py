@@ -1,4 +1,7 @@
+from typing import Tuple
+
 from gi.repository import Gtk, Gio, Adw, GLib
+from loguru import logger
 
 from todopatamus.services.todo_service import TodoService
 
@@ -23,9 +26,10 @@ class Actions:
             name: the name of the action
             callback: the function to be called when the action is
               activated
+            args: an optional GLib.VariantType
             shortcuts: an optional list of accelerators
         """
-        action = Gio.SimpleAction.new(name, None)
+        action = Gio.SimpleAction.new(name, args)
         action.connect("activate", callback)
         self.app.add_action(action)
         if shortcuts:
@@ -44,8 +48,16 @@ class Actions:
 
     def on_preferences_action(self, widget, _):
         """Callback for the app.preferences action."""
-        print('app.preferences action activated')
+        logger.info('app.preferences action activated')
 
-    def on_toggle_completed_action(self, widget, *args):
-        print('toggle_completed action activated')
-        print(args)
+    def on_toggle_completed_action(self, _widget, values: Tuple[str, bool]):
+        todo_id = values[0]
+        completed = values[1]
+        if not todo_id or not completed:
+            logger.warning(f'Invalid toggle_completed action values: {values}')
+            return
+
+        logger.debug("toggle_completed action: todo_id={todo_id}, completed={completed}",
+                     todo_id=todo_id,
+                     completed=completed)
+        self.todo_service.toggle_completed(todo_id, completed)

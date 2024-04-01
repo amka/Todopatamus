@@ -43,16 +43,34 @@ class TodoService(GObject.GObject):
 
         return items
 
-    def get_todo(self, todo_id: str):
-        _filter = Gom.Filter.new_eq(TodoItem, "id", todo_id)
+    def get_todo(self, todo_id: str) -> TodoItem:
+        logger.debug(f"TodoService get_todo {todo_id}")
+        _filter = Gom.Filter.new_eq(TodoItem, "todoId", todo_id)
         return self.repository.find_one_sync(TodoItem, filter=_filter)
 
-    def put_todo(self, todo: TodoItem):
+    def put_todo(self, todo: TodoItem) -> TodoItem:
+        logger.debug(f"TodoService put_todo {todo.todoId}")
         item: TodoItem = TodoItem(repository=self.repository, summary=todo.summary)
         item.todoId = todo.todoId
         item.completed = todo.completed
         item.createdAt = datetime.datetime.now(datetime.UTC).timestamp()
-        item.updatedAt = datetime.datetime.now(datetime.UTC).timestamp()
+        item.modifiedAt = datetime.datetime.now(datetime.UTC).timestamp()
         item.save_sync()
 
         self.emit("todos-changed", item.todoId)
+
+        return item
+
+    def toggle_completed(self, todo_id: str, completed: bool) -> TodoItem:
+        logger.debug(f"TodoService toggle_completed {todo_id} {completed}")
+        item = self.get_todo(todo_id)
+        item.completed = completed
+        item.modifiedAt = datetime.datetime.now(datetime.UTC).timestamp()
+        if completed:
+            item.completedAt = datetime.datetime.now(datetime.UTC).timestamp()
+        else:
+            item.completedAt = None
+        item.save_sync()
+
+        self.emit("todos-changed", item.todoId)
+        return item

@@ -6,10 +6,8 @@ template $TodoListItem : Gtk.Box {
   margin-top: 8;
   margin-bottom: 8;
 
-  Button completed_btn {
-    icon-name: 'checkbox-symbolic';
-    clicked => $on_toggle_complete();
-    styles ["flat"]
+  CheckButton completed_btn {
+    toggled => $on_toggle_complete();
   }
 
   Label summary_label {

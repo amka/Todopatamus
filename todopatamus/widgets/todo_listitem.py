@@ -23,6 +23,7 @@
 # SPDX-License-Identifier: MIT
 
 from gi.repository import Gtk, GObject, GLib
+from loguru import logger
 
 from todopatamus.models.todoitem import TodoItem
 
@@ -38,7 +39,7 @@ class TodoListItem(Gtk.Box):
 
     _todo: TodoItem = None
 
-    completed_btn: Gtk.Button = Gtk.Template.Child()
+    completed_btn: Gtk.CheckButton = Gtk.Template.Child()
     summary_label: Gtk.Label = Gtk.Template.Child()
     favorite_btn: Gtk.Button = Gtk.Template.Child()
     view_more_btn: Gtk.Button = Gtk.Template.Child()
@@ -50,9 +51,11 @@ class TodoListItem(Gtk.Box):
             self._update_ui(todo)
 
     def _update_ui(self, todo):
-        completed_icon_name = 'checkbox-checked-symbolic' if todo.completed else 'checkbox-symbolic'
-        self.completed_btn.set_icon_name(completed_icon_name)
+        # completed_icon_name = 'checkbox-checked-symbolic' if todo.completed else 'checkbox-symbolic'
+        # self.completed_btn.set_icon_name(completed_icon_name)
         self.summary_label.set_markup(todo.summary)
+        self._todo.bind_property('summary', self.summary_label, 'label', GObject.BindingFlags.SYNC_CREATE)
+        self._todo.bind_property('completed', self.completed_btn, 'active', GObject.BindingFlags.SYNC_CREATE)
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def todo(self):
@@ -64,7 +67,7 @@ class TodoListItem(Gtk.Box):
         self._update_ui(todo)
 
     @Gtk.Template.Callback()
-    def on_toggle_complete(self, _button: Gtk.Button):
+    def on_toggle_complete(self, _button: Gtk.CheckButton):
         # todo: replace this with an action
         todo_id = GLib.Variant.new_string(self._todo.todoId)
         completed = GLib.Variant.new_boolean(not self._todo.completed)
