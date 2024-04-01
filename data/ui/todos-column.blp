@@ -1,0 +1,24 @@
+using Gtk 4.0;
+using Gio 2.0;
+using Adw 1;
+
+template $TodosColumn : Adw.Bin {
+
+  ScrolledWindow {
+
+    Adw.ClampScrollable {
+        maximum-size: 640;
+
+      ListView todos_listview {
+        factory:  SignalListItemFactory {
+          bind => $on_item_bind();
+          setup => $on_item_setup();
+        };
+
+        model: SingleSelection {
+          model: Gio.ListStore todos {};
+        };
+      }
+    }
+  }
+}

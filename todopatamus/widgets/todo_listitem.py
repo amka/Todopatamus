@@ -22,20 +22,38 @@
 #
 # SPDX-License-Identifier: MIT
 
-from gi.repository import Adw
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 
-from todopatamus.widgets.todos_column import TodosColumn
+from todopatamus.models.todoitem import TodoItem
 
 
-@Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/window.ui')
-class TodopatamusWindow(Adw.ApplicationWindow):
-    __gtype_name__ = 'TodopatamusWindow'
+@Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/todo-listitem.ui')
+class TodoListItem(Gtk.Box):
+    __gtype_name__ = "TodoListItem"
 
-    todos_column: TodosColumn = Gtk.Template.Child()
+    _todo: TodoItem = None
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    completed_btn: Gtk.Button = Gtk.Template.Child()
+    summary_label: Gtk.Label = Gtk.Template.Child()
+    favorite_btn: Gtk.Button = Gtk.Template.Child()
+    view_more_btn: Gtk.Button = Gtk.Template.Child()
 
-        if Gtk.Application.get_default().props.profile == 'dev':
-            self.add_css_class('devel')
+    def __init__(self, todo: TodoItem = None):
+        super().__init__()
+
+        if todo is not None:
+            self._update_ui(todo)
+
+    def _update_ui(self, todo):
+        completed_icon_name = 'checkbox-checked-symbolic' if todo.completed else 'checkbox-symbolic'
+        self.completed_btn.set_icon_name(completed_icon_name)
+        self.summary_label.set_markup(todo.summary)
+
+    @GObject.Property(type=GObject.TYPE_PYOBJECT)
+    def todo(self):
+        return self._todo
+
+    @todo.setter
+    def todo(self, todo: TodoItem):
+        self._todo = todo
+        self._update_ui(todo)

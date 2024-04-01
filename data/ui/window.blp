@@ -6,6 +6,7 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
   default-height: 640;
   width-request: 360;
   height-request: 360;
+  title: "Todopatamus";
 
   content: Adw.ToolbarView {
     [top]
@@ -19,13 +20,7 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
       }
     }
 
-    content: Label label {
-      label: 'Hello, World!';
-
-      styles [
-        "title-1",
-      ]
-    };
+    content: $TodosColumn todos_column {};
   };
 }
 
