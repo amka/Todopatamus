@@ -1,0 +1,6 @@
+data/com.tenderowl.todopatamus.desktop.in
+data/com.tenderowl.todopatamus.metainfo.xml.in
+data/com.tenderowl.todopatamus.gschema.xml
+src/main.py
+src/window.py
+src/window.ui

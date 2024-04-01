@@ -1,0 +1,7 @@
+.flatpak-builder
+.idea
+.vscode
+
+__pycache__
+venv
+*.db
