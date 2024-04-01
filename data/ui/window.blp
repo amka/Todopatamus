@@ -11,6 +11,12 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
   content: Adw.ToolbarView {
     [top]
     Adw.HeaderBar header_bar {
+
+      title-widget: Adw.ViewSwitcher view_switcher {
+        policy: wide;
+        stack: pages_stack;
+      };
+
       [end]
       MenuButton {
         primary: true;
@@ -20,19 +26,48 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
       }
     }
 
-    content: Adw.ToolbarView {
+    content: Adw.ViewStack pages_stack {
 
-      content: $TodosColumn todos_column {
-        vexpand: true;
-      };
+      Adw.ViewStackPage {
+        name: 'tasks-page';
+        title: _('Tasks');
+        icon-name: 'view-list-bullet-symbolic';
 
-      [bottom]
-      Adw.Clamp {
-        maximum-size: 640;
+        child: Adw.ToolbarView {
+          content: $TodosColumn todos_column {
+            vexpand: true;
+          };
 
-        $TodoEntry todo_entry {}
+          [bottom]
+          Adw.Clamp {
+            maximum-size: 640;
+
+            $TodoEntry todo_entry {}
+          }
+        };
       }
 
+      Adw.ViewStackPage {
+        name: 'notes-page';
+        title: _('Notes');
+        icon-name: 'emblem-documents-symbolic';
+
+        child: Adw.StatusPage {
+          title: "Notes";
+          icon-name: 'emblem-documents-symbolic';
+        };
+      }
+
+      Adw.ViewStackPage {
+        name: 'inbox-page';
+        title: _('Inbox');
+        icon-name: 'preferences-system-notifications-symbolic';
+
+        child: Adw.StatusPage {
+          title: "Notes";
+          icon-name: 'preferences-system-notifications-symbolic';
+        };
+      }
     };
   };
 }
