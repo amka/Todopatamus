@@ -8,32 +8,81 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
   height-request: 360;
   title: "🦛 Todopatamus";
 
-  content: Adw.ToolbarView {
-    [top]
-    Adw.HeaderBar header_bar {
-      [end]
-      MenuButton {
-        primary: true;
-        icon-name: 'open-menu-symbolic';
-        tooltip-text: _('Menu');
-        menu-model: primary_menu;
+  Adw.Breakpoint {
+    condition ("max-width: 400sp")
+    setters {
+      split_view.collapsed: true;
+    }
+  }
+
+  content: Adw.NavigationSplitView split_view {
+    [sidebar]
+    Adw.NavigationPage {
+      title: _('Todopatamus');
+
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar header_bar {
+          [end]
+          MenuButton {
+            primary: true;
+            icon-name: 'open-menu-symbolic';
+            tooltip-text: _('Menu');
+            menu-model: primary_menu;
+          }
+        }
+
+        content: ScrolledWindow {
+          ListView {
+            styles ['navigation-sidebar']
+            factory: BuilderListItemFactory {
+              template ListItem {
+                child: Label {
+                  label: bind template.item as <StringObject>.string;
+                  xalign: 0.0;
+                  hexpand: true;
+                  ellipsize: end;
+                  styles ["heading"]
+                };
+              }
+            };
+
+            model: SingleSelection {
+              model: StringList {
+                strings [ "Inbox", "Favorite", "Completed" ]
+              };
+            };
+          }
+        };
       }
     }
 
-    content: Adw.ToolbarView {
+    [content]
+    Adw.NavigationPage {
+      title: _('Tasks');
 
-      content: $TodosColumn todos_column {
-        vexpand: true;
-      };
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar tasks_header_bar {}
 
-      [bottom]
-      Adw.Clamp {
-        maximum-size: 640;
+        content: Adw.ToolbarView {
 
-        $TodoEntry todo_entry {}
+          content: $TodosColumn todos_column {
+            vexpand: true;
+          };
+
+          [bottom]
+          Adw.Clamp {
+            maximum-size: 640;
+
+            $TodoEntry todo_entry {
+              has-default: true;
+            }
+          }
+
+        };
       }
-
-    };
+    }
   };
 }
 
