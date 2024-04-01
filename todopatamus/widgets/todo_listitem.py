@@ -22,7 +22,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, GLib
 
 from todopatamus.models.todoitem import TodoItem
 
@@ -30,6 +30,11 @@ from todopatamus.models.todoitem import TodoItem
 @Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/todo-listitem.ui')
 class TodoListItem(Gtk.Box):
     __gtype_name__ = "TodoListItem"
+
+    __gsignals__ = {
+        'toggle-complete': (GObject.SignalFlags.RUN_FIRST, None, (str, bool)),
+        'toggle-favorite': (GObject.SignalFlags.RUN_FIRST, None, (str, bool)),
+    }
 
     _todo: TodoItem = None
 
@@ -57,3 +62,19 @@ class TodoListItem(Gtk.Box):
     def todo(self, todo: TodoItem):
         self._todo = todo
         self._update_ui(todo)
+
+    @Gtk.Template.Callback()
+    def on_toggle_complete(self, _button: Gtk.Button):
+        # todo: replace this with an action
+        todo_id = GLib.Variant.new_string(self._todo.todoId)
+        completed = GLib.Variant.new_boolean(not self._todo.completed)
+        self.activate_action('app.toggle-complete', GLib.Variant.new_tuple(todo_id, completed))
+        self.emit('toggle-complete', self._todo.todoId, not self._todo.completed)
+
+    @Gtk.Template.Callback()
+    def on_toggle_favorite(self, _button: Gtk.Button):
+        # todo: replace this with an action
+        todo_id = GLib.Variant.new_string(self._todo.todoId)
+        favorite = GLib.Variant.new_boolean(not self._todo.favorite)
+        self.activate_action('toggle-favorite', GLib.Variant.new_tuple(todo_id, favorite))
+        self.emit('toggle-favorite', self._todo.todoId, not self._todo.favorite)

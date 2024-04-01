@@ -27,6 +27,7 @@ import sys
 from gi.overrides import GObject
 from gi.repository import Gio, Adw
 
+from .actions import Actions
 from .services.db import DbService
 from .services.todo_service import TodoService
 from .window import TodopatamusWindow
@@ -52,9 +53,8 @@ class TodopatamusApplication(Adw.Application):
         self.todo_service = TodoService(self.db_service)
         self.set_property('todo_service', self.todo_service)
 
-        self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
-        self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action)
+        # Install actions
+        Actions(app=self)
 
     def do_activate(self):
         """Called when the application is activated.
@@ -66,21 +66,6 @@ class TodopatamusApplication(Adw.Application):
         if not win:
             win = TodopatamusWindow(application=self)
         win.present()
-
-    def on_about_action(self, widget, _):
-        """Callback for the app.about action."""
-        about = Adw.AboutWindow(transient_for=self.props.active_window,
-                                application_name='todopatamus',
-                                application_icon='com.tenderowl.todopatamus',
-                                developer_name='Andrey Maksimov',
-                                version='0.1.0',
-                                developers=['Andrey Maksimov'],
-                                copyright='© 2024 Andrey Maksimov')
-        about.present()
-
-    def on_preferences_action(self, widget, _):
-        """Callback for the app.preferences action."""
-        print('app.preferences action activated')
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.

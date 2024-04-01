@@ -8,6 +8,7 @@ template $TodoListItem : Gtk.Box {
 
   Button completed_btn {
     icon-name: 'checkbox-symbolic';
+    clicked => $on_toggle_complete();
     styles ["flat"]
   }
 
@@ -19,6 +20,7 @@ template $TodoListItem : Gtk.Box {
 
   Button favorite_btn {
     icon-name: 'non-starred-symbolic';
+    clicked => $on_toggle_favorite();
     styles ["flat"]
   }
 
