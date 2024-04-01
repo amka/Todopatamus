@@ -1,10 +1,18 @@
-# pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
-# moduledir = pkgdatadir / 'todopatamus'
-# gnome = import('gnome')
+
+blueprints = custom_target('blueprints',
+  input: files(
+    'ui/window.blp',
+    'ui/help-overlay.blp',
+  ),
+  output: '.',
+  command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
+)
+
 
 gnome.compile_resources('todopatamus',
   'todopatamus.gresource.xml',
   gresource_bundle: true,
+  dependencies: blueprints,
   install: true,
   install_dir: pkgdatadir,
 )
