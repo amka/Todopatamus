@@ -1,14 +1,23 @@
-from gi.overrides import Gom
+from loguru import logger
 
-from models.todoitem import TodoItem
-from services.db import DbService
+from gi.repository import Gom
+
+from todopatamus.models.todoitem import TodoItem
+from todopatamus.services.db import DbService
 
 
 class TodoService:
     def __init__(self, db_service: DbService):
+        logger.debug("TodoService init")
         self.db_service = db_service
         self.repository = Gom.Repository(adapter=db_service.adapter)
+
+        self.apply_migrations()
+
+    def apply_migrations(self):
+        logger.debug("TodoService begin migration")
         self.repository.automatic_migrate_sync(1, [TodoItem])
+        logger.debug("TodoService migration completed")
 
     def get_todos(self):
         raise NotImplementedError()

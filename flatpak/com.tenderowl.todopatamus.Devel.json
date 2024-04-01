@@ -39,6 +39,7 @@
     },
     "gom.json",
     "python3-nanoid.json",
+    "python3-loguru.json",
     {
       "name": "todopatamus",
       "builddir": true,

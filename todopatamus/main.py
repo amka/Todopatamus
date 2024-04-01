@@ -27,7 +27,8 @@ import sys
 from gi.overrides import GObject
 from gi.repository import Gio, Adw
 
-from todopatamus.services.db import DbService
+from .services.db import DbService
+from .services.todo_service import TodoService
 from .window import TodopatamusWindow
 
 
@@ -37,6 +38,7 @@ class TodopatamusApplication(Adw.Application):
     version: str = GObject.property(type=str, default='0.1.0')
     profile: str = GObject.property(type=str, default='dev')
     db_service: DbService = GObject.property(type=GObject.TYPE_PYOBJECT)
+    todo_service: TodoService = GObject.property(type=GObject.TYPE_PYOBJECT)
 
     def __init__(self, version: str, profile: str):
         super().__init__(application_id='com.tenderowl.todopatamus',
@@ -47,6 +49,7 @@ class TodopatamusApplication(Adw.Application):
         self.profile = profile
 
         self.db_service = DbService('./todopatamus.db')
+        self.todo_service = TodoService(self.db_service)
 
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)

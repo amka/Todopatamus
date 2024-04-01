@@ -1,5 +1,6 @@
-from gi.repository import Gom
 from gi.repository import GObject
+from gi.repository import Gom
+from loguru import logger
 
 
 class DbService(GObject.GObject):
@@ -11,3 +12,4 @@ class DbService(GObject.GObject):
     def __init__(self, path: str):
         self.adapter = Gom.Adapter()
         self.adapter.open_sync(path)
+        logger.debug("DbService initialized at {}", path)
