@@ -8,8 +8,10 @@ class DbService(GObject.GObject):
 
     path: str = GObject.Property(type=str)
     adapter: Gom.Adapter = None
+    repository: Gom.Repository = None
 
     def __init__(self, path: str):
         self.adapter = Gom.Adapter()
         self.adapter.open_sync(path)
+        self.repository = Gom.Repository(adapter=self.adapter)
         logger.debug("DbService initialized at {}", path)

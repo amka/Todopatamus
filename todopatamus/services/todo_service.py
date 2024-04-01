@@ -1,6 +1,5 @@
-from loguru import logger
-
 from gi.repository import Gom
+from loguru import logger
 
 from todopatamus.models.todoitem import TodoItem
 from todopatamus.services.db import DbService
@@ -10,7 +9,7 @@ class TodoService:
     def __init__(self, db_service: DbService):
         logger.debug("TodoService init")
         self.db_service = db_service
-        self.repository = Gom.Repository(adapter=db_service.adapter)
+        self.repository = self.db_service.repository
 
         self.apply_migrations()
 
