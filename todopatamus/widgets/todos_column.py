@@ -37,6 +37,8 @@ class TodosColumn(Adw.Bin):
 
     todos_listview: Gtk.ListView = Gtk.Template.Child()
     todos: Gio.ListStore = Gtk.Template.Child()
+    stack: Gtk.Stack = Gtk.Template.Child()
+    status_page: Adw.StatusPage = Gtk.Template.Child()
 
     def __init__(self):
         super().__init__()
@@ -65,6 +67,11 @@ class TodosColumn(Adw.Bin):
         self.todos.remove_all()
         for todo in todos:
             self.todos.append(todo)
+
+        if len(self.todos) > 0:
+            self.stack.set_visible_child_name('todos')
+        else:
+            self.stack.set_visible_child_name('empty')
 
     def _on_todos_changed(self, _service: TodoService, todo_id: str):
         logger.debug(f"Todo {todo_id} changed")
