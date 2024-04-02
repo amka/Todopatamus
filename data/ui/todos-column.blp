@@ -10,7 +10,8 @@ template $TodosColumn : Adw.Bin {
         maximum-size: 640;
 
       ListView todos_listview {
-        single-click-activate: false;
+        single-click-activate: true;
+        activate => $on_listview_activate();
         factory:  SignalListItemFactory {
           bind => $on_item_bind();
           setup => $on_item_setup();

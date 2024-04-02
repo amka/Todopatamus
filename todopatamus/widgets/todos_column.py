@@ -55,9 +55,21 @@ class TodosColumn(Adw.Bin):
         todo_list_item.todo = todo_item
 
     @Gtk.Template.Callback()
-    def on_item_setup(self, factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem):
+    def on_item_setup(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem):
         todo_list_item: TodoListItem = TodoListItem()
         list_item.set_child(todo_list_item)
+
+    @Gtk.Template.Callback()
+    def on_listview_activate(self, _list_view: Gtk.ListView, position: int):
+        item: TodoItem = self.todos.get_item(position)
+        dlg = Adw.Dialog()
+        child = Adw.ToolbarView()
+        child.add_top_bar(Adw.HeaderBar())
+        child.set_content(Gtk.Label(label='TODO'))
+        dlg.set_child(child)
+        dlg.set_content_width(400)
+        dlg.set_content_height(480)
+        dlg.present(Gtk.Application.get_default().get_active_window())
 
     def load_todos(self):
         todos: List[TodoItem] = self.todo_service.get_todos()
@@ -66,5 +78,5 @@ class TodosColumn(Adw.Bin):
         for todo in todos:
             self.todos.append(todo)
 
-    def _on_todos_changed(self, serivce: TodoService, todo_id: str):
+    def _on_todos_changed(self, _service: TodoService, todo_id: str):
         self.load_todos()

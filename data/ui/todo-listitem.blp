@@ -22,8 +22,20 @@ template $TodoListItem : Gtk.Box {
     styles ["flat"]
   }
 
-  Button view_more_btn {
+  MenuButton view_more_btn {
+    can-focus: true;
     icon-name: 'view-more-horizontal-symbolic';
+    popover: PopoverMenu view_more_popover {
+      position: right;
+      menu-model: view_more_menu;
+    };
     styles ["flat"]
   }
+}
+
+menu view_more_menu {
+  item ("Edit", "action", "icon")
+  item ("Mark completed", "app.mark_completed")
+  item ("Mark as important", "action")
+  item ("Delete", "action")
 }
