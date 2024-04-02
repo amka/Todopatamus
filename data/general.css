@@ -1,0 +1,4 @@
+/* Disable hover coloring */
+.todo-list row:hover {
+  background-color: transparent;
+}

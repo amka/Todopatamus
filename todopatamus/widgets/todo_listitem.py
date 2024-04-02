@@ -23,7 +23,6 @@
 # SPDX-License-Identifier: MIT
 
 from gi.repository import Gtk, GObject, GLib
-from loguru import logger
 
 from todopatamus.models.todoitem import TodoItem
 

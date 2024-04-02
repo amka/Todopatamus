@@ -10,6 +10,7 @@ template $TodosColumn : Adw.Bin {
         maximum-size: 640;
 
       ListView todos_listview {
+        single-click-activate: false;
         factory:  SignalListItemFactory {
           bind => $on_item_bind();
           setup => $on_item_setup();
@@ -19,7 +20,7 @@ template $TodosColumn : Adw.Bin {
           model: Gio.ListStore todos {};
         };
 
-        styles ["background", 'navigation-sidebar']
+        styles ["background", 'navigation-sidebar', 'todo-list']
       }
     }
   }

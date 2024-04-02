@@ -22,7 +22,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-from gi.repository import Adw
+from gi.repository import Adw, Gdk
 from gi.repository import Gtk
 
 from todopatamus.models.todoitem import TodoItem
@@ -43,11 +43,21 @@ class TodopatamusWindow(Adw.ApplicationWindow):
 
         self.todo_service: TodoService = application.props.todo_service
 
-        if Gtk.Application.get_default().props.profile == 'dev':
-            self.add_css_class('devel')
+        self.apply_styling()
 
         self.todo_entry.grab_focus()
         self.todo_entry.connect('create', self.on_todo_create)
+
+    def apply_styling(self):
+        # Check if we're running in development mode
+        if Gtk.Application.get_default().props.profile == 'dev':
+            self.add_css_class('devel')
+
+        # Load custom CSS
+        css = Gtk.CssProvider()
+        css.load_from_resource('/com/tenderowl/todopatamus/general.css')
+        Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css,
+                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     def on_todo_create(self, _entry: TodoEntry, todo: TodoItem):
         self.todo_service.put_todo(todo)
