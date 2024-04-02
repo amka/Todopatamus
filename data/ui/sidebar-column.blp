@@ -1,0 +1,47 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SidebarColumn : Box {
+  orientation: vertical;
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar header_bar {
+      [end]
+      MenuButton {
+        primary: true;
+        icon-name: 'open-menu-symbolic';
+        tooltip-text: _('Menu');
+        menu-model: bind template.primary_menu;
+      }
+    }
+
+    content: Box {
+      ScrolledWindow {
+        hexpand: true;
+        vexpand: true;
+
+        ListView {
+          styles ['navigation-sidebar']
+          factory: BuilderListItemFactory {
+            template ListItem {
+              child: Label {
+                label: bind template.item as <StringObject>.string;
+                xalign: 0.0;
+                hexpand: true;
+                ellipsize: end;
+                styles ["heading"]
+              };
+            }
+          };
+
+          model: SingleSelection {
+            model: StringList {
+              strings [ "Inbox", "Favorite", "Completed" ]
+            };
+          };
+        }
+      }
+    };
+  }
+}

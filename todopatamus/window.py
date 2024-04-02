@@ -27,6 +27,7 @@ from gi.repository import Gtk
 
 from todopatamus.models.todoitem import TodoItem
 from todopatamus.services.todo_service import TodoService
+from todopatamus.widgets.sidebar_column import SidebarColumn
 from todopatamus.widgets.todo_entry import TodoEntry
 from todopatamus.widgets.todos_column import TodosColumn
 
@@ -35,6 +36,7 @@ from todopatamus.widgets.todos_column import TodosColumn
 class TodopatamusWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'TodopatamusWindow'
 
+    sidebar_column: SidebarColumn = Gtk.Template.Child()
     todos_column: TodosColumn = Gtk.Template.Child()
     todo_entry: TodoEntry = Gtk.Template.Child()
 
