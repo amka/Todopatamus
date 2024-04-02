@@ -66,5 +66,6 @@ class TodosColumn(Adw.Bin):
         for todo in todos:
             self.todos.append(todo)
 
-    def _on_todos_changed(self, serivce: TodoService, todo_id: str):
+    def _on_todos_changed(self, _service: TodoService, todo_id: str):
+        logger.debug(f"Todo {todo_id} changed")
         self.load_todos()

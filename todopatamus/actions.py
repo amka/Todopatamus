@@ -18,6 +18,7 @@ class Actions:
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
         self.create_action('toggle-complete', self.on_toggle_completed_action, args=GLib.VariantType.new('(sb)'))
+        self.create_action('category-activate', self.on_category_activate_action, args=GLib.VariantType.new('s'))
 
     def create_action(self, name, callback, shortcuts=None, args: GLib.VariantType = None):
         """Add an application action.
@@ -61,3 +62,7 @@ class Actions:
                      todo_id=todo_id,
                      completed=completed)
         self.todo_service.toggle_completed(todo_id, completed)
+
+    def on_category_activate_action(self, widget, category_name: GLib.Variant):
+        logger.debug('on_category_activated {}', category_name)
+        self.todo_service.set_current_category(category_name.get_string())

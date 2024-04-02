@@ -1,4 +1,5 @@
 using Gtk 4.0;
+using Gio 2.0;
 using Adw 1;
 
 template $SidebarColumn : Box {
@@ -22,24 +23,32 @@ template $SidebarColumn : Box {
         vexpand: true;
 
         ListView {
-          styles ['navigation-sidebar']
+          single-click-activate: true;
+          activate => $on_listview_activate();
           factory: BuilderListItemFactory {
             template ListItem {
-              child: Label {
-                label: bind template.item as <StringObject>.string;
-                xalign: 0.0;
-                hexpand: true;
-                ellipsize: end;
-                styles ["heading"]
+              child: Box {
+                Image {
+                  icon-name: bind template.item as <$Category>.icon_name;
+                  margin-end: 6;
+                }
+
+                Label {
+                  label: bind template.item as <$Category>.title;
+                  xalign: 0.0;
+                  hexpand: true;
+                  ellipsize: end;
+                  styles ["heading"]
+                }
               };
             }
           };
 
-          model: SingleSelection {
-            model: StringList {
-              strings [ "Inbox", "Favorite", "Completed" ]
-            };
+          model: SingleSelection selection_model {
+            model: Gio.ListStore categories {};
           };
+
+          styles ['navigation-sidebar']
         }
       }
     };

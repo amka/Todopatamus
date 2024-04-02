@@ -15,6 +15,8 @@ class TodoService(GObject.GObject):
         "todos-changed": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
     }
 
+    current_category: str = GObject.Property(type=str, default="inbox")
+
     def __init__(self, db_service: DbService):
         super().__init__()
 
@@ -27,21 +29,16 @@ class TodoService(GObject.GObject):
 
     def apply_migrations(self):
         logger.debug("TodoService begin migration")
-        self.repository.automatic_migrate_sync(1, [TodoItem])
+        self.repository.automatic_migrate_sync(2, [TodoItem])
         logger.debug("TodoService migration completed")
 
     def get_todos(self, page_number: int = 1, page_size: int = 30) -> List[TodoItem]:
-        _filter = Gom.Filter.new_eq(TodoItem, "completed", False)
+        _filter: Gom.Filter = TodoService.get_filter_by_category(self.current_category)
         _sorting: Gom.Sorting = Gom.Sorting(TodoItem, "createdAt", Gom.SortingMode.DESCENDING)
 
         group: Gom.ResourceGroup = self.repository.find_sorted_sync(TodoItem, filter=_filter, sorting=_sorting)
-        group.fetch_sync(0, page_size)
-
-        items: List[TodoItem] = []
-        for item in group:
-            items.append(item)
-
-        return items
+        group.fetch_sync((page_number - 1) * page_size, page_size)
+        return group
 
     def get_todo(self, todo_id: str) -> TodoItem:
         logger.debug(f"TodoService get_todo {todo_id}")
@@ -74,3 +71,27 @@ class TodoService(GObject.GObject):
 
         self.emit("todos-changed", item.todoId)
         return item
+
+    def set_current_category(self, name: str):
+        logger.debug(f"TodoService set_current_category {name}")
+        self.current_category = name
+        self.emit("todos-changed", name)
+
+    @staticmethod
+    def get_filter_by_category(category: str) -> Gom.Filter:
+        match category:
+            # Favorite, not completed
+            case "favorite":
+                return Gom.Filter.new_and(
+                    Gom.Filter.new_eq(TodoItem, "favorite", True),
+                    Gom.Filter.new_eq(TodoItem, "completed", False),
+                )
+            # All Completed
+            case "completed":
+                return Gom.Filter.new_or(
+                    Gom.Filter.new_eq(TodoItem, "completed", False),
+                    Gom.Filter.new_eq(TodoItem, "completed", True)
+                )
+            # Inbox, not completed, not favorite
+            case _:
+                return Gom.Filter.new_eq(TodoItem, "completed", False)

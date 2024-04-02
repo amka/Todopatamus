@@ -56,6 +56,7 @@ class TodoListItem(Gtk.Box):
         self.summary_label.set_markup(todo.summary)
         self._todo.bind_property('summary', self.summary_label, 'label', GObject.BindingFlags.SYNC_CREATE)
         self._todo.bind_property('completed', self.completed_btn, 'active', GObject.BindingFlags.SYNC_CREATE)
+        self.favorite_btn.set_icon_name('starred-symbolic' if todo.favorite else 'non-starred-symbolic')
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def todo(self):

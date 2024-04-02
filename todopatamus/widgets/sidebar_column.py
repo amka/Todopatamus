@@ -21,7 +21,10 @@
 # SOFTWARE.
 #
 # SPDX-License-Identifier: MIT
-from gi.repository import Gtk, GObject, Gio
+from gi.repository import Gtk, GObject, Gio, GLib
+from loguru import logger
+
+from todopatamus.models.category import Category
 
 
 @Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/sidebar-column.ui')
@@ -31,5 +34,27 @@ class SidebarColumn(Gtk.Box):
     # Passed in template
     primary_menu = GObject.Property(type=Gio.Menu)
 
+    selection_model: Gtk.SingleSelection = Gtk.Template.Child()
+    categories: Gio.ListStore = Gtk.Template.Child()
+
     def __init__(self):
         super().__init__()
+
+        self.setup_categories()
+        self._on_category_activated(self.categories.get_item(0))
+
+    def setup_categories(self):
+        self.categories.remove_all()
+        self.categories.append(Category(title='Inbox', icon_name='preferences-system-notifications-symbolic'))
+        self.categories.append(Category(title='Favorite', icon_name='starred-symbolic'))
+        self.categories.append(Category(title='Completed', icon_name='checkbox-checked-symbolic'))
+
+    @Gtk.Template.Callback()
+    def on_listview_activate(self, _list_view: Gtk.ListView, position: int):
+        logger.debug(f'SidebarColumn.on_selection_changed: {position}')
+        self.selection_model.set_selected(position)
+        self._on_category_activated(self.categories.get_item(position))
+
+    def _on_category_activated(self, category: Category):
+        logger.debug(f'SidebarColumn._on_category_activated: {category}')
+        self.activate_action('app.category-activate', GLib.Variant.new_string(category.name))

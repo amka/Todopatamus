@@ -8,6 +8,7 @@ class TodoItemResourceMeta(GObjectMeta):
         cls.set_table("todo_items")
         cls.set_primary_key("todoId")
         cls.set_notnull("summary")
+        cls.set_property_new_in_version('favorite', 2)
 
 
 class TodoItem(Gom.Resource, metaclass=TodoItemResourceMeta):
@@ -22,6 +23,7 @@ class TodoItem(Gom.Resource, metaclass=TodoItemResourceMeta):
     createdAt = GObject.Property(type=int)
     modifiedAt = GObject.Property(type=int)
 
+    favorite = GObject.Property(type=bool, default=False)
     completed = GObject.Property(type=bool, default=False)
     completedAt = GObject.Property(type=int)
 
