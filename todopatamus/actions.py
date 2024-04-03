@@ -54,7 +54,7 @@ class Actions:
     def on_toggle_completed_action(self, _widget, values: Tuple[str, bool]):
         todo_id = values[0]
         completed = values[1]
-        if not todo_id or not completed:
+        if not todo_id or completed is None:
             logger.warning(f'Invalid toggle_completed action values: {values}')
             return
 

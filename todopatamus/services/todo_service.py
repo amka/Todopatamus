@@ -66,7 +66,7 @@ class TodoService(GObject.GObject):
         if completed:
             item.completedAt = datetime.datetime.now(datetime.UTC).timestamp()
         else:
-            item.completedAt = None
+            item.completedAt = -1
         item.save_sync()
 
         self.emit("todos-changed", item.todoId)
@@ -88,10 +88,7 @@ class TodoService(GObject.GObject):
                 )
             # All Completed
             case "completed":
-                return Gom.Filter.new_or(
-                    Gom.Filter.new_eq(TodoItem, "completed", False),
-                    Gom.Filter.new_eq(TodoItem, "completed", True)
-                )
+                return Gom.Filter.new_eq(TodoItem, "completed", True)
             # Inbox, not completed, not favorite
             case _:
                 return Gom.Filter.new_eq(TodoItem, "completed", False)
