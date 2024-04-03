@@ -8,13 +8,7 @@ template $SidebarColumn : Box {
   Adw.ToolbarView {
     [top]
     Adw.HeaderBar header_bar {
-      [end]
-      MenuButton {
-        primary: true;
-        icon-name: 'open-menu-symbolic';
-        tooltip-text: _('Menu');
-        menu-model: bind template.primary_menu;
-      }
+      title-widget: Label {};
     }
 
     content: Box {

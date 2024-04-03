@@ -9,45 +9,44 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
   title: "🦛 Todopatamus";
 
   Adw.Breakpoint {
-    condition ("max-width: 400sp")
+    condition ("max-width: 639sp")
     setters {
       split_view.collapsed: true;
     }
   }
 
-  content: Adw.NavigationSplitView split_view {
-    [sidebar]
-    Adw.NavigationPage {
-      title: _('Todopatamus');
+  content: Adw.OverlaySplitView split_view {
 
-      $SidebarColumn sidebar_column {
-        primary_menu: primary_menu;
-      }
+    [sidebar]
+    $SidebarColumn sidebar_column {
+      primary_menu: primary_menu;
     }
 
     [content]
-    Adw.NavigationPage {
-      title: _('Tasks');
-
-      Adw.ToolbarView {
-        [top]
-        Adw.HeaderBar tasks_header_bar {}
-
-        content: Adw.ToolbarView {
-
-          content: $TodosColumn todos_column {
-            vexpand: true;
-          };
-
-          [bottom]
-          Adw.Clamp {
-            maximum-size: 640;
-
-            $TodoEntry todo_entry {}
-          }
-
-        };
+    Adw.ToolbarView {
+      [top]
+      Adw.HeaderBar tasks_header_bar {
+        ToggleButton sidebar_btn {
+          icon-name: 'sidebar-show-symbolic';
+          active: bind split_view.show-sidebar bidirectional;
+          tooltip-text: _('Toggle Sidebar');
+        }
       }
+
+      content: Adw.ToolbarView {
+
+        content: $TodosColumn todos_column {
+          vexpand: true;
+        };
+
+        [bottom]
+        Adw.Clamp {
+          maximum-size: 640;
+
+          $TodoEntry todo_entry {}
+        }
+
+      };
     }
   };
 }
