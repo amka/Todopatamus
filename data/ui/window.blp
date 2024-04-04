@@ -33,19 +33,19 @@ template $TodopatamusWindow: Adw.ApplicationWindow {
         }
       }
 
-      content: Adw.ToolbarView {
+      content: Adw.ToastOverlay toast_overlay {
+        Adw.ToolbarView {
+          content: $TodosColumn todos_column {
+            vexpand: true;
+          };
 
-        content: $TodosColumn todos_column {
-          vexpand: true;
-        };
+          [bottom]
+          Adw.Clamp {
+            maximum-size: 640;
 
-        [bottom]
-        Adw.Clamp {
-          maximum-size: 640;
-
-          $TodoEntry todo_entry {}
+            $TodoEntry todo_entry {}
+          }
         }
-
       };
     }
   };

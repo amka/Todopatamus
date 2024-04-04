@@ -82,6 +82,11 @@ class TodopatamusApplication(Adw.Application):
         if shortcuts:
             self.set_accels_for_action(f"app.{name}", shortcuts)
 
+    def show_toast(self, title, timeout: int = None, action_name: str = None):
+        win = self.props.active_window
+        if win:
+            win.show_toast(title, timeout, action_name)
+
 
 def main(version: str, profile: str):
     """The application's entry point."""

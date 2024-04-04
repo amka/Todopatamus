@@ -58,6 +58,20 @@ class TodoService(GObject.GObject):
 
         return item
 
+    def update_todo(self, todo_id: str, todo: TodoItem) -> TodoItem:
+        logger.debug(f"TodoService update_todo {todo_id} {todo}")
+        item = self.get_todo(todo_id)
+        item.summary = todo.summary
+        item.completed = todo.completed
+        item.body = todo.body
+        item.priority = todo.priority
+        item.modifiedAt = datetime.datetime.now(datetime.UTC).timestamp()
+        item.save_sync()
+
+        self.emit("todos-changed", item.todoId)
+
+        return item
+
     def toggle_completed(self, todo_id: str, completed: bool) -> TodoItem:
         logger.debug(f"TodoService toggle_completed {todo_id} {completed}")
         item = self.get_todo(todo_id)

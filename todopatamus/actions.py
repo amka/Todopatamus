@@ -17,6 +17,7 @@ class Actions:
         self.create_action('quit', lambda *_: self.app.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
+        self.create_action('show-toast', self.on_show_toast_dialog, args=GLib.VariantType.new('(sis)'))
         self.create_action('toggle-complete', self.on_toggle_completed_action, args=GLib.VariantType.new('(sb)'))
         self.create_action('category-activate', self.on_category_activate_action, args=GLib.VariantType.new('s'))
 
@@ -66,3 +67,8 @@ class Actions:
     def on_category_activate_action(self, widget, category_name: GLib.Variant):
         logger.debug('on_category_activated {}', category_name)
         self.todo_service.set_current_category(category_name.get_string())
+
+    def on_show_toast_dialog(self, widget, values: GLib.Variant):
+        title = values.unpack()
+        logger.debug("show_toast dialog: title={title}", title=title)
+        Gtk.Application.get_default().show_toast(*values.unpack())

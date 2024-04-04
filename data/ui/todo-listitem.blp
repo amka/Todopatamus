@@ -10,10 +10,21 @@ template $TodoListItem : Gtk.Box {
     toggled => $on_toggle_complete();
   }
 
-  Label summary_label {
-    ellipsize: end;
-    xalign: 0;
-    hexpand: true;
+  Box {
+    orientation: vertical;
+    spacing: 6;
+    valign: center;
+
+    Label summary_label {
+      ellipsize: end;
+      xalign: 0;
+      hexpand: true;
+    }
+
+    Label due_date_label {
+      halign: start;
+      styles['dim-label', 'caption-heading']
+    }
   }
 
   Button favorite_btn {

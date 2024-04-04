@@ -28,4 +28,4 @@ class TodoItem(Gom.Resource, metaclass=TodoItemResourceMeta):
     completedAt = GObject.Property(type=int)
 
     def __str__(self):
-        return f'<TodoItem {self.todo_id}: {self.summary[:20]}>'
+        return f'<TodoItem {self.todoId}: {self.summary[:20]}>'

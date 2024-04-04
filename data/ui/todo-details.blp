@@ -1,0 +1,61 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $TodoDetails : Box {
+  orientation: vertical;
+  spacing: 8;
+  margin-end: 12;
+  margin-start: 12;
+  margin-top: 12;
+  margin-bottom: 12;
+
+  Box {
+    orientation: vertical;
+    margin-bottom: 12;
+    spacing: 8;
+
+    Label {
+      label: _('Summary');
+      xalign: 0;
+    }
+
+    Entry summary_entry {
+      placeholder-text: _('Task De');
+    }
+  }
+
+
+  Box {
+    orientation: vertical;
+    margin-bottom: 12;
+    spacing: 8;
+
+    Label {
+      label: _('Priority');
+      xalign: 0;
+    }
+
+    DropDown priority_dropdown {
+      model: StringList {
+        strings [ "Nice to have", "Normal", "Urgent"]
+      };
+    }
+  }
+
+   Box {
+    orientation: vertical;
+    margin-bottom: 12;
+    spacing: 8;
+
+    Label {
+      label: _('Description');
+      xalign: 0;
+    }
+
+    TextView body_entry {
+      height-request: 96;
+      top-margin: 9;
+      bottom-margin: 9;
+    }
+  }
+}

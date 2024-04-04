@@ -36,6 +36,7 @@ from todopatamus.widgets.todos_column import TodosColumn
 class TodopatamusWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'TodopatamusWindow'
 
+    toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
     sidebar_column: SidebarColumn = Gtk.Template.Child()
     todos_column: TodosColumn = Gtk.Template.Child()
     todo_entry: TodoEntry = Gtk.Template.Child()
@@ -50,6 +51,13 @@ class TodopatamusWindow(Adw.ApplicationWindow):
 
         self.todo_entry.grab_focus()
         self.todo_entry.connect('create', self.on_todo_create)
+
+    def show_toast(self, title: str, timeout: int = 2000, action_name: str = None):
+        toast: Adw.Toast = Adw.Toast.new(title)
+        toast.set_timeout(timeout)
+        if action_name:
+            toast.set_action_name(action_name)
+        self.toast_overlay.add_toast(toast)
 
     def on_todo_create(self, _entry: TodoEntry, todo: TodoItem):
         self.todo_service.put_todo(todo)

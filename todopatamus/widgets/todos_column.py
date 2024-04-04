@@ -23,11 +23,12 @@
 # SPDX-License-Identifier: MIT
 from typing import List
 
-from gi.repository import Adw, Gtk, Gio
+from gi.repository import Adw, Gtk, Gio, GLib
 from loguru import logger
 
 from todopatamus.models.todoitem import TodoItem
 from todopatamus.services.todo_service import TodoService
+from todopatamus.widgets.dialogs.todo_details import TodoDetailsDialog
 from todopatamus.widgets.todo_listitem import TodoListItem
 
 
@@ -61,6 +62,14 @@ class TodosColumn(Adw.Bin):
         todo_list_item: TodoListItem = TodoListItem()
         list_item.set_child(todo_list_item)
 
+    @Gtk.Template.Callback()
+    def on_item_activate(self, list_view: Gtk.ListView, position: int):
+        dlg = TodoDetailsDialog(readonly=True)
+        dlg.todo_item = self.todos.get_item(position)
+        dlg.connect('cancel', lambda x: dlg.close())
+        dlg.connect('save', self._on_todo_details_save)
+        dlg.present(Gtk.Application.get_default().props.active_window)
+
     def load_todos(self):
         todos: List[TodoItem] = self.todo_service.get_todos()
         logger.debug(f"Loaded {len(todos)} todos")
@@ -76,3 +85,17 @@ class TodosColumn(Adw.Bin):
     def _on_todos_changed(self, _service: TodoService, todo_id: str):
         logger.debug(f"Todo {todo_id} changed")
         self.load_todos()
+
+    def _on_todo_details_save(self, dlg: TodoDetailsDialog, todo: TodoItem):
+        try:
+            self.todo_service.update_todo(todo.todoId, todo)
+
+            self.activate_action('app.show-toast', GLib.Variant.new_tuple(
+                GLib.Variant.new_string(f'Todo "{todo.summary}" Updated'),
+                GLib.Variant.new_int32(2000),
+                GLib.Variant.new_string(''),
+            ))
+        except Exception as e:
+            logger.exception(e)
+        finally:
+            dlg.close()

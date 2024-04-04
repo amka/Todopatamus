@@ -4,38 +4,45 @@ using Adw 1;
 
 template $TodosColumn : Adw.Bin {
 
-  Stack stack {
-    StackPage {
-      name: 'empty';
-      child: Adw.StatusPage status_page {
-        title: _('All things done!');
-        icon-name: 'com.tenderowl.todopatamus';
-        styles ["dim-label"]
-      };
-    }
+  ScrolledWindow {
+    vexpand: true;
+    hexpand: true;
 
-    StackPage {
-      name: 'todos';
+    Stack stack {
+      StackPage {
+        name: 'empty';
+        child: Adw.StatusPage status_page {
+          title: _('All things done!');
+          icon-name: 'com.tenderowl.todopatamus';
+          styles ["dim-label"]
+        };
+      }
 
-      child: ScrolledWindow {
+      StackPage {
+        name: 'todos';
 
-        Adw.ClampScrollable {
-            maximum-size: 640;
+        child: ScrolledWindow {
 
-          ListView todos_listview {
-            factory:  SignalListItemFactory {
-              bind => $on_item_bind();
-              setup => $on_item_setup();
-            };
+          Adw.ClampScrollable {
+              maximum-size: 640;
 
-            model: NoSelection {
-              model: Gio.ListStore todos {};
-            };
+            ListView todos_listview {
+              activate => $on_item_activate();
 
-            styles ["background", 'navigation-sidebar']
+              factory:  SignalListItemFactory {
+                bind => $on_item_bind();
+                setup => $on_item_setup();
+              };
+
+              model: NoSelection {
+                model: Gio.ListStore todos {};
+              };
+
+              styles ["background", 'navigation-sidebar']
+            }
           }
-        }
-      };
+        };
+      }
     }
   }
 }

@@ -21,11 +21,12 @@
 # SOFTWARE.
 #
 # SPDX-License-Identifier: MIT
+import datetime
 
 from gi.repository import Gtk, GObject, GLib
-from loguru import logger
 
 from todopatamus.models.todoitem import TodoItem
+from todopatamus.services.utils import Utils
 
 
 @Gtk.Template(resource_path='/com/tenderowl/todopatamus/ui/todo-listitem.ui')
@@ -41,6 +42,7 @@ class TodoListItem(Gtk.Box):
 
     completed_btn: Gtk.CheckButton = Gtk.Template.Child()
     summary_label: Gtk.Label = Gtk.Template.Child()
+    due_date_label: Gtk.Label = Gtk.Template.Child()
     favorite_btn: Gtk.Button = Gtk.Template.Child()
     view_more_btn: Gtk.Button = Gtk.Template.Child()
 
@@ -57,6 +59,9 @@ class TodoListItem(Gtk.Box):
         self._todo.bind_property('summary', self.summary_label, 'label', GObject.BindingFlags.SYNC_CREATE)
         self._todo.bind_property('completed', self.completed_btn, 'active', GObject.BindingFlags.SYNC_CREATE)
         self.favorite_btn.set_icon_name('starred-symbolic' if todo.favorite else 'non-starred-symbolic')
+
+        due_date = datetime.datetime.fromtimestamp(todo.modifiedAt)
+        self.due_date_label.set_text(Utils.relative_time(due_date))
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def todo(self):

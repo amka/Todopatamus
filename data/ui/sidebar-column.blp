@@ -17,7 +17,10 @@ template $SidebarColumn : Box {
         vexpand: true;
 
         ListView {
-          single-click-activate: true;
+          single-click-activate: false;
+          show-separators: false;
+          enable-rubberband: false;
+
           activate => $on_listview_activate();
           factory: BuilderListItemFactory {
             template ListItem {
@@ -39,7 +42,13 @@ template $SidebarColumn : Box {
           };
 
           model: SingleSelection selection_model {
-            model: Gio.ListStore categories {};
+            autoselect: false;
+              model: SortListModel sort_model {
+                model: Gio.ListStore categories {};
+                sorter: CustomSorter sorter {};
+                section-sorter: CustomSorter section_sorter {};
+              };
+
           };
 
           styles ['navigation-sidebar']
